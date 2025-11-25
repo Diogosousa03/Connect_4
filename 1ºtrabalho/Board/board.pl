@@ -15,7 +15,7 @@ empty_board([
 ]).
 print_board(Board) :-
     nl,
-    write(' 1 2 3 4 5 6 7'), nl,
+    write(' 1  2  3  4  5  6  7'), nl,
     write('---------------------'), nl,
     print_rows(Board),
     write('---------------------'), nl.
@@ -34,6 +34,6 @@ print_row(H) :-
 % Percorre todas as células de uma linha
 print_cells([]) :- !.
 print_cells([H|T]) :-
-    write(H), write('|'),write('_'),
+    write(H), write('|'),write('_'),write('|'),
     print_cells(T).    
 
