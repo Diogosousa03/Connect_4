@@ -10,7 +10,7 @@ main :- start.
 start :-
     nl,
     write('========================='), nl,
-    write('   Connect 4 (Prolog)   '), nl,
+    write('   Connect 4    '), nl,
     write('========================='), nl,
     game_init.
 

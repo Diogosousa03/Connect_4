@@ -15,9 +15,9 @@ check_column([H|T], Index,empty_Row):-
 
 
 
-get_element(Index,[H|_], H).
+get_element(1,[H|_], H).
 
 get_element(Index,[_|T], Elem):-
     Index>1,
     Index1 is Index-1,
-    get_element(Index,T,Elem).
+    get_element(Index1,T,Elem).

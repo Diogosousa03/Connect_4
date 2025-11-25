@@ -1,0 +1,4 @@
+->Compile:
+          [main].
+->Run:
+          main.
