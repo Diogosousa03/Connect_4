@@ -13,7 +13,6 @@ init_turn(P1, P2) :-
     P1 = player(1, Piece1),
 
     remove_available_pieces(Piece1, List1, List2),
-    write('HELLLLLOOOOOOOOOO'),
     format('Player 2, choose a piece: ~w~n', [List2]),
     read(Piece2),
     P2 = player(2, Piece2).
