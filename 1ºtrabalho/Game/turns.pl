@@ -1,24 +1,38 @@
-:- module(turns, [init_turn/0]).
+:- module(turns, [init_turn/2, next_turn/4]).
 
-%R -> Red Piece
-%Y -> Yellow Piece
-%B -> Black Piece
-%W -> White Piece
-
+% Available pieces
 available_pieces([r,y,b,w]).
 
-init_turn(Piece1,Piece2):- 
-    format('Player 1, choose a piece: ~w~n',[available_pieces]),
+% -------------------------
+% INIT TURN
+% -------------------------
+init_turn(P1, P2) :- 
+    available_pieces(List1),
+    format('Player 1, choose a piece: ~w~n', [List1]),
     read(Piece1),
-    remove_available_pieces(Piece1,available_pieces,NewAvailablePieces),
-    format('Player 2, choose a piece: ~w~n',[NewAvailablePieces]),
-    read(Piece2)
+    P1 = player(1, Piece1),
+
+    remove_available_pieces(Piece1, List1, List2),
+    write('HELLLLLOOOOOOOOOO'),
+    format('Player 2, choose a piece: ~w~n', [List2]),
+    read(Piece2),
+    P2 = player(2, Piece2).
 
 
+% -------------------------
+% REMOVE PIECE FROM LIST
+% -------------------------
+remove_available_pieces(Piece, [Piece|Tail], Tail).
+remove_available_pieces(Piece, [H|T], [H|T1]) :-
+    remove_available_pieces(Piece, T, T1).
 
 
-remove_available_pieces(piece,[piece|Tail],NewList).
-
-remove_available_pieces(piece,[Head|Tail],[Head|Tail1]):-
-    remove_available_pieces(piece,Tail,Tail1).
-    
+% -------------------------
+% SWITCH TURN
+% -------------------------
+next_turn(Current, P1, P2, Next) :-
+    (Current = P1 ->
+        Next = P2
+    ;
+        Next = P1
+    ).

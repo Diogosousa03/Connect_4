@@ -21,7 +21,9 @@ print_board(Board) :-
     write('---------------------'), nl.
 
 % Percorre todas as linhas
+
 print_rows([]) :- !.
+
 print_rows([H|T]) :-
     print_row(H),
     print_rows(T).
