@@ -63,35 +63,51 @@ first_column([[H|T]|Rest], [H|Hs], [T|Ts]) :-
 
 
 /* ============================================================
-   3. DIAGONAL WIN
-   ============================================================ */
+3. DIAGONAL WIN  (FULLY FIXED)
+============================================================ */
+
 win_diagonal(Board, Color) :-
-    diagonal_right(Board, Color);
-    diagonal_left(Board, Color).
+win_diag_down_right(Board, Color);
+win_diag_down_left(Board, Color).
 
-diagonal_right(Board, Color) :-
-    diagonal_lines(Board, 1, 1, 1, 1, Color).
+/* ----------------------------------------------
+\  DIAGONAL  (down-right)
+Starts only where a 4-length diagonal is possible
+---------------------------------------------- */
+win_diag_down_right(Board, Color) :-
+between(1, 3, Row),      % only rows 1..3 can start a \ diagonal of length >=4
+between(1, 4, Col),      % only cols 1..4
+diag_down_right(Board, Row, Col, Diag),
+sublist([Color,Color,Color,Color], Diag).
 
-diagonal_left(Board, Color) :-
-    diagonal_lines(Board, 1, 7, 1, -1, Color).
+diag_down_right(Board, Row, Col, [E|Rest]) :-
+safe_get(Board, Row, Col, E),
+R2 is Row + 1,
+C2 is Col + 1,
+diag_down_right(Board, R2, C2, Rest).
+diag_down_right(_, Row, Col, []) :-
+(Row > 6 ; Col > 7).
 
-/* Generate all diagonal paths and test for 4 in a row */
-diagonal_lines(Board, Row, Col, DR, DC, Color) :-
-    diagonal_from(Board, Row, Col, DR, DC, Diag),
-    win_in_line(Diag, Color).
+/* ----------------------------------------------
+/  DIAGONAL (down-left)
+---------------------------------------------- */
+win_diag_down_left(Board, Color) :-
+between(1, 3, Row),
+between(4, 7, Col),
+diag_down_left(Board, Row, Col, Diag),
+sublist([Color,Color,Color,Color], Diag).
 
-/* Collect diagonal elements safely */
-diagonal_from(Board, Row, Col, DR, DC, [Elem|Rest]) :-
-    safe_get(Board, Row, Col, Elem),
-    R2 is Row + DR,
-    C2 is Col + DC,
-    diagonal_from(Board, R2, C2, DR, DC, Rest).
-diagonal_from(_, Row, Col, _, _, []) :-
-    Row < 1 ; Row > 6 ; Col < 1 ; Col > 7.
+diag_down_left(Board, Row, Col, [E|Rest]) :-
+safe_get(Board, Row, Col, E),
+R2 is Row + 1,
+C2 is Col - 1,
+diag_down_left(Board, R2, C2, Rest).
+diag_down_left(_, Row, Col, []) :-
+(Row > 6 ; Col < 1).
 
-/* Safe element access */
+/* -------- safe_get ---------- */
 safe_get(Board, Row, Col, Elem) :-
-    Row >= 1, Row =< 6,
-    Col >= 1, Col =< 7,
-    get_element(Row, Board, Line),
-    get_element(Col, Line, Elem).
+Row >= 1, Row =< 6,
+Col >= 1, Col =< 7,
+get_element(Row, Board, Line),
+get_element(Col, Line, Elem).
